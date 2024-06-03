@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  aiogram-bot:
+    build: .
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: test
+      DATABASE_NAME: fpk
+      DATABASE_HOST: postgres
+
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: test
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      - ./init:/docker-entrypoint-initdb.d/
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - '8889:8080'
+
+volumes:
+  postgres_data:
